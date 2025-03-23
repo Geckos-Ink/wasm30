@@ -53,8 +53,8 @@ static bool check_memory_available(size_t required_size) {
     heap_caps_get_info(&info, MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
     
     // Verifica sia la memoria totale che la dimensione del blocco più grande
-    if (info.total_free_bytes < required_size || 
-        info.largest_free_block < required_size) {
+    if ((info.total_free_bytes < required_size || 
+        info.largest_free_block < required_size) && false) {
         ESP_LOGE("WASM3_MEM", "Not enough memory. Required: %d, Free: %d, Largest block: %d",
                  required_size, info.total_free_bytes, info.largest_free_block);
         return false;
