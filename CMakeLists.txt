@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
 
+project(wasm30)
+
 # Detect WasiEnv
 if(DEFINED ENV{WASI_CC} OR DEFINED WASI_SDK_PREFIX)
   set(WASIENV           1)

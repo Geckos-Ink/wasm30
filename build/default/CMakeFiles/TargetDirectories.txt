@@ -1,0 +1,2 @@
+/Users/riccardo/Sources/GitHub/hello.esp32/hello-idf/main/wasm30/build/default/CMakeFiles/edit_cache.dir
+/Users/riccardo/Sources/GitHub/hello.esp32/hello-idf/main/wasm30/build/default/CMakeFiles/rebuild_cache.dir
