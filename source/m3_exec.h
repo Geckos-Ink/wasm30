@@ -650,7 +650,7 @@ d_m3Op (CallIndirect)
     else forwardTrap(r);
 }
 
-DEBUG_TYPE WASM_DEBUG_CallRawFunction = WASM_DEBUG_ALL || (WASM_DEBUG && false);
+DEBUG_TYPE WASM_DEBUG_CallRawFunction = WASM_DEBUG_ALL || (WASM_DEBUG && true);
 d_m3Op (CallRawFunction)
 {
     CALL_WATCHDOG
@@ -902,7 +902,7 @@ d_m3Op  (Entry)
     else newTrap (m3Err_trapStackOverflow);
 }
 
-DEBUG_TYPE WASM_DEBUG_Loop = WASM_DEBUG_ALL || (WASM_DEBUG && false);
+DEBUG_TYPE WASM_DEBUG_Loop = WASM_DEBUG_ALL || (WASM_DEBUG && true);
 d_m3Op  (Loop)
 {
     if(WASM_DEBUG_Loop) ESP_LOGI("WASM3", "Loop beginning");
