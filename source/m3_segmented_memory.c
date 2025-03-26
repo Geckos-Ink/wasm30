@@ -4,6 +4,8 @@
 #include "wasm3.h"
 #include <stdint.h>
 
+#include "m3_debug.h"
+
 #define WASM_SEGMENTED_MEM_LAZY_ALLOC true
 
 DEBUG_TYPE WASM_DEBUG_GET_OFFSET_POINTER = WASM_DEBUG_ALL || (WASM_DEBUG && false);
@@ -991,6 +993,10 @@ M3Result m3_memcpy(M3Memory* memory, void* dest, const void* src, size_t n) {
         // Perform copy for current chunk  
         if(WASM_DEBUG_GenericMemory){   
             ESP_LOGI("WASM3", "memcpy(%p, %p, %d)", real_dest, real_src, copy_size); 
+
+            log_bytes(real_dest, copy_size);
+            log_bytes(real_src, copy_size);
+
             waitForIt(); 
         }
         memcpy(real_dest, real_src, copy_size);

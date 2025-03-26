@@ -94,3 +94,14 @@ NOINLINE_ATTR static void trace_exit(const void* op, int depth, const char* func
 #define CHECK_MEMORY_PTR(mem, pos) nothing_todo()
 #endif
 
+///
+/// Bytes debugging
+///
+
+/**
+ * @brief Stampa una serie di byte nel log
+ * 
+ * @param data Puntatore ai dati da stampare
+ * @param length Lunghezza in byte dei dati
+ */
+void log_bytes(const uint8_t *data, size_t length);
