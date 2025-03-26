@@ -282,7 +282,7 @@ IM3Memory m3_NewStack(){
     return memory;
 }
 
-DEBUG_TYPE WASM_DEBUG_NEW_RUNTIME = WASM_DEBUG_ALL || (WASM_DEBUG && false);
+DEBUG_TYPE WASM_DEBUG_NEW_RUNTIME = WASM_DEBUG_ALL || (WASM_DEBUG && true);
 IM3Runtime  m3_NewRuntime  (IM3Environment i_environment, u32 i_stackSizeInBytes, void * i_userdata)
 {
     if(WASM_DEBUG_NEW_RUNTIME) ESP_LOGI("WASM3", "m3_NewRuntime called");
@@ -319,7 +319,7 @@ IM3Runtime  m3_NewRuntime  (IM3Environment i_environment, u32 i_stackSizeInBytes
         size_t stackSize = i_stackSizeInBytes + 4 * sizeof (m3slot_t);
         if(WASM_DEBUG_NEW_RUNTIME) {
             ESP_LOGI("WASM3", "m3_NewRuntime: allocating originStack (%d)", stackSize);
-            ESP_LOGI("WASM3", "flush");
+            //ESP_LOGI("WASM3", "flush");
         }
 
         #if M3Runtime_Stack_Segmented
@@ -329,6 +329,9 @@ IM3Runtime  m3_NewRuntime  (IM3Environment i_environment, u32 i_stackSizeInBytes
         #endif 
         //runtime->originStack = m3_NewStack(); // (not implemented) ad hoc M3Memory for stack        
         
+        if(WASM_DEBUG_NEW_RUNTIME){
+            ESP_LOGI("WASM3", "m3_NewRuntime: originStack ptr: %p", runtime->originStack);
+        }
 
         if (runtime->originStack)
         {
