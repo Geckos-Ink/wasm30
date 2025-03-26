@@ -164,8 +164,10 @@ ptr get_segment_pointer(IM3Memory memory, mos offset) {
     
     // Validate segment
     if (segment_index >= memory->num_segments) {
-        ESP_LOGE("WASM3", "add_segment_pointer: pointer outside segment limits");
-        return (ptr)&ERROR_POINTER;
+        if(false){ // don't add new needed segments
+            ESP_LOGE("WASM3", "add_segment_pointer: pointer outside segment limits: %llu > %llu", segment_index, memory->num_segments);
+            return (ptr)&ERROR_POINTER;
+        }
 
         // Try to grow memory if needed
         if (segment_index - memory->num_segments <= 2) {
@@ -258,7 +260,7 @@ ptr get_segment_pointer(IM3Memory memory, mos offset) {
 }
 
 
-DEBUG_TYPE WASM_DEBUG_m3_ResolvePointer = WASM_DEBUG_ALL || (WASM_DEBUG && false);
+DEBUG_TYPE WASM_DEBUG_m3_ResolvePointer = WASM_DEBUG_ALL || (WASM_DEBUG && true);
 ptr m3_ResolvePointer(M3Memory* memory, mos offset) {
     #if TRACK_MEMACCESS
     ESP_LOGI("WASM3", "m3_ResolvePointer: requested offset %d", offset);
@@ -694,7 +696,7 @@ static mos ptr_to_offset(M3Memory* memory, void* ptr) {
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-static const bool WASM_DEBUG_GenericMemory = true;
+DEBUG_TYPE WASM_DEBUG_GenericMemory = WASM_DEBUG_ALL || (WASM_DEBUG && true);
 
 // Helper function to create a new chunk metadata structure
 static MemoryChunk* create_chunk(size_t size, uint16_t start_segment, uint16_t num_segments) {
@@ -930,6 +932,7 @@ ChunkInfo get_chunk_info(M3Memory* memory, void* ptr) {
 ///
 
 // Memory copy function that handles segmented memory
+DEBUG_TYPE WASM_DEBUG_m3_memcpy = WASM_DEBUG_ALL || (WASM_DEBUG && true);
 M3Result m3_memcpy(M3Memory* memory, void* dest, const void* src, size_t n) {
     // Early validation
     if (!dest || !src || !n) {
@@ -946,6 +949,11 @@ M3Result m3_memcpy(M3Memory* memory, void* dest, const void* src, size_t n) {
     // Check if pointers are segmented
     bool dest_is_segmented = IsValidMemoryAccess(memory, CAST_PTR dest, n);
     bool src_is_segmented = IsValidMemoryAccess(memory, CAST_PTR src, n);
+
+    if(WASM_DEBUG_m3_memcpy){
+        ESP_LOGI("WASM3", "dest_is_segmented: %d", dest_is_segmented);
+        ESP_LOGI("WASM3", "src_is_segmented: %d", src_is_segmented);
+    }
 
     if(!dest_is_segmented && !src_is_segmented) {
         memcpy(dest, src, n);
@@ -983,7 +991,7 @@ M3Result m3_memcpy(M3Memory* memory, void* dest, const void* src, size_t n) {
         // Perform copy for current chunk  
         if(WASM_DEBUG_GenericMemory){   
             ESP_LOGI("WASM3", "memcpy(%p, %p, %d)", real_dest, real_src, copy_size); 
-            wait(); 
+            waitForIt(); 
         }
         memcpy(real_dest, real_src, copy_size);
 
