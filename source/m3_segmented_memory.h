@@ -117,6 +117,7 @@ bool IsValidMemoryAccess(IM3Memory memory, mos offset, size_t size);
 ptr get_segment_pointer(IM3Memory memory, mos offset);
 ptr m3_ResolvePointer(M3Memory* memory, mos offset);
 void* m3SegmentedMemAccess(IM3Memory mem, m3stack_t offset, size_t size);
+void* m3SegmentedMemAccess_pc(IM3Memory memory, m3stack_t offset, size_t size, int type);
 mos get_offset_pointer(IM3Memory memory, void* ptr);
 
 /// Regions 

@@ -262,7 +262,7 @@ ptr get_segment_pointer(IM3Memory memory, mos offset) {
 }
 
 
-DEBUG_TYPE WASM_DEBUG_m3_ResolvePointer = WASM_DEBUG_ALL || (WASM_DEBUG && true);
+DEBUG_TYPE WASM_DEBUG_m3_ResolvePointer = WASM_DEBUG_ALL || (WASM_DEBUG && false);
 ptr m3_ResolvePointer(M3Memory* memory, mos offset) {
     #if TRACK_MEMACCESS
     ESP_LOGI("WASM3", "m3_ResolvePointer: requested offset %d", offset);
@@ -698,7 +698,7 @@ static mos ptr_to_offset(M3Memory* memory, void* ptr) {
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-DEBUG_TYPE WASM_DEBUG_GenericMemory = WASM_DEBUG_ALL || (WASM_DEBUG && true);
+DEBUG_TYPE WASM_DEBUG_GenericMemory = WASM_DEBUG_ALL || (WASM_DEBUG && false);
 
 // Helper function to create a new chunk metadata structure
 static MemoryChunk* create_chunk(size_t size, uint16_t start_segment, uint16_t num_segments) {
@@ -934,7 +934,7 @@ ChunkInfo get_chunk_info(M3Memory* memory, void* ptr) {
 ///
 
 // Memory copy function that handles segmented memory
-DEBUG_TYPE WASM_DEBUG_m3_memcpy = WASM_DEBUG_ALL || (WASM_DEBUG && true);
+DEBUG_TYPE WASM_DEBUG_m3_memcpy = WASM_DEBUG_ALL || (WASM_DEBUG && false);
 M3Result m3_memcpy(M3Memory* memory, void* dest, const void* src, size_t n) {
     // Early validation
     if (!dest || !src || !n) {
@@ -1063,6 +1063,17 @@ DEBUG_TYPE WASM_DEBUG_m3SegmentedMemAccess = WASM_DEBUG_ALL || (WASM_DEBUG && tr
 void* m3SegmentedMemAccess(IM3Memory memory, m3stack_t offset, size_t size) {
     if(WASM_DEBUG_m3SegmentedMemAccess){
         ESP_LOGI("WASM3", "Requested offset: %p (%d) at mem %p", offset, size, memory);
+    }
+
+    return (void*)m3_ResolvePointer(memory, (mos)(uintptr_t)offset);
+}
+
+// Ad hoc function for pc++
+void* m3SegmentedMemAccess_pc(IM3Memory memory, m3stack_t offset, size_t size, int type) {
+    mos asMos = (mos)(uintptr_t)offset;
+
+    if(WASM_DEBUG_m3SegmentedMemAccess){
+        ESP_LOGI("WASM3", "Requested PC (%d) offset: %p (%d) at mem %p (as mos: %llu)", type, offset, size, memory, asMos);
     }
 
     return (void*)m3_ResolvePointer(memory, (mos)(uintptr_t)offset);

@@ -52,12 +52,12 @@
 #define WASM_DEBUG 1
 #endif
 
-#define DEBUG_MEMORY 0
+#define DEBUG_MEMORY 1
 
-#define WASM_ENABLE_OP_TRACE 0
-#define WASM_TRACE_LOADSTORE 0
+#define WASM_ENABLE_OP_TRACE 1
+#define WASM_TRACE_LOADSTORE 1
 #define M3_FUNCTIONS_ENUM 1
-#define TRACK_MEMACCESS 0
+#define TRACK_MEMACCESS 1
 
 #define WASM_ENABLE_CHECK_MEMORY_PTR 0
 
@@ -457,6 +457,7 @@ typedef uint32_t mos;
 
 #define CAST_PTR (mos)(uintptr_t)
 
+// void* or mos?
 typedef void* ptr; //todo: check it
 
 #define m3ApiOffsetToPtr(offset)              m3_ResolvePointer(_mem, offset)

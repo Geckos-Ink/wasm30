@@ -19,7 +19,7 @@ d_m3BeginExternC
 // Ottiene i dati del primo segmento (per compatibilità con codice legacy)
 // original: # define m3MemData(mem)                 (u8*)(((M3MemoryHeader*)(mem))+1)
 //#define m3MemData(mem)                 ((u8*)(((IM3Memory)(mem))->segments[0]->data))
-#define m3MemData(mem)                 ((u8*)(1)) // just zero
+#define m3MemData(mem)                 ((u8*)(0)) // just zero
 
 // Ottiene il runtime associato alla memoria
 #define m3MemRuntime(mem)              (((IM3Memory)(mem))->runtime)

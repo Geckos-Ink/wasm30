@@ -53,14 +53,14 @@ d_m3BeginExternC
 #define skip_immediate(TYPE)        (_pc++)
 
 // Legge un valore immediato dal program counter e lo incrementa
-#define immediate_ptr(TYPE)             (TYPE*)m3SegmentedMemAccess(_mem, _pc++, sizeof(TYPE))
+#define immediate_ptr(TYPE)             (TYPE*)m3SegmentedMemAccess_pc(_mem, _pc++, sizeof(TYPE), 1)
 #define immediate(TYPE)                 *immediate_ptr(TYPE)
 
 // Accede al valore nello slot dello stack usando un offset immediato
-#define slot(TYPE)                  *(TYPE*)m3SegmentedMemAccess(_mem, _sp + immediate(i32), sizeof(TYPE))
+#define slot(TYPE)                  *(TYPE*)m3SegmentedMemAccess_pc(_mem, _sp + immediate(i32), sizeof(TYPE), 10)
 
 // Ottiene il puntatore allo slot dello stack usando un offset immediato
-#define slot_ptr(TYPE)             (TYPE*)m3SegmentedMemAccess(_mem, _sp + immediate(i32), sizeof(TYPE))
+#define slot_ptr(TYPE)             (TYPE*)m3SegmentedMemAccess_pc(_mem, _sp + immediate(i32), sizeof(TYPE), 11)
 
 # if d_m3EnableOpProfiling || d_m3EnableOpTracing // originally only d_m3EnableOpProfiling
    # if M3_FUNCTIONS_ENUM
@@ -1565,6 +1565,8 @@ d_m3Load_i (i64, i64);
 /// Segmented memory store
 ///
 
+//     ESP_LOGI("WASM_sr", "operand: %lu, offset: %lu", operand, offset); 
+
 #define d_m3Store(REG, SRC_TYPE, DEST_TYPE)             \
 d_m3Op  (SRC_TYPE##_Store_##DEST_TYPE##_rs)             \
 {                                                       \
@@ -1593,7 +1595,6 @@ d_m3Op  (SRC_TYPE##_Store_##DEST_TYPE##_sr)             \
     u64 operand = (u32) _r0;                            \
     u32 offset = immediate (u32);                       \
     operand += offset;                                  \
-    ESP_LOGI("WASM_sr", "operand: %lu, offset: %lu", operand, offset); \
                                                         \
     if (m3MemCheck(                                     \
         operand + sizeof (DEST_TYPE) <= _mem->length    \
