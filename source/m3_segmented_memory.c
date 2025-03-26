@@ -1073,7 +1073,7 @@ void* m3SegmentedMemAccess_pc(IM3Memory memory, m3stack_t offset, size_t size, i
     mos asMos = (mos)(uintptr_t)offset;
 
     if(WASM_DEBUG_m3SegmentedMemAccess){
-        ESP_LOGI("WASM3", "Requested PC (%d) offset: %p (%d) at mem %p (as mos: %llu)", type, offset, size, memory, asMos);
+        ESP_LOGI("WASM3", "Requested PC (%d) offset: %p (%d) at mem %p (as mos: %lu)", type, offset, size, memory, asMos);
     }
 
     return (void*)m3_ResolvePointer(memory, (mos)(uintptr_t)offset);

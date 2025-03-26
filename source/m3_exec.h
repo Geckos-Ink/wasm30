@@ -53,14 +53,15 @@ d_m3BeginExternC
 #define skip_immediate(TYPE)        (_pc++)
 
 // Legge un valore immediato dal program counter e lo incrementa
+//fix: _pc acquisisce valore al posto di mos pointer
 #define immediate_ptr(TYPE)             (TYPE*)m3SegmentedMemAccess_pc(_mem, _pc++, sizeof(TYPE), 1)
 #define immediate(TYPE)                 *immediate_ptr(TYPE)
 
 // Accede al valore nello slot dello stack usando un offset immediato
-#define slot(TYPE)                  *(TYPE*)m3SegmentedMemAccess_pc(_mem, _sp + immediate(i32), sizeof(TYPE), 10)
+#define slot(TYPE)                  *(TYPE*)m3SegmentedMemAccess(_mem, _sp + immediate(i32), sizeof(TYPE))
 
 // Ottiene il puntatore allo slot dello stack usando un offset immediato
-#define slot_ptr(TYPE)             (TYPE*)m3SegmentedMemAccess_pc(_mem, _sp + immediate(i32), sizeof(TYPE), 11)
+#define slot_ptr(TYPE)             (TYPE*)m3SegmentedMemAccess(_mem, _sp + immediate(i32), sizeof(TYPE))
 
 # if d_m3EnableOpProfiling || d_m3EnableOpTracing // originally only d_m3EnableOpProfiling
    # if M3_FUNCTIONS_ENUM
