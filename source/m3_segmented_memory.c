@@ -959,6 +959,7 @@ M3Result m3_memcpy(M3Memory* memory, void* dest, const void* src, size_t n) {
 
     if(!dest_is_segmented && !src_is_segmented) {
         memcpy(dest, src, n);
+        return NULL;
     }
 
     size_t bytes_remaining = n;
@@ -992,7 +993,7 @@ M3Result m3_memcpy(M3Memory* memory, void* dest, const void* src, size_t n) {
 
         // Perform copy for current chunk  
         if(WASM_DEBUG_GenericMemory){   
-            ESP_LOGI("WASM3", "memcpy(%p, %p, %d)", real_dest, real_src, copy_size); 
+            ESP_LOGI("WASM3", "memcpy(%p, %p, %d) - bytes_remaining: %d", real_dest, real_src, copy_size, bytes_remaining); 
 
             log_bytes(real_dest, copy_size);
             log_bytes(real_src, copy_size);
@@ -1058,7 +1059,12 @@ M3Result m3_memset(M3Memory* memory, void* ptr, int value, size_t n) {
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
+DEBUG_TYPE WASM_DEBUG_m3SegmentedMemAccess = WASM_DEBUG_ALL || (WASM_DEBUG && true);
 void* m3SegmentedMemAccess(IM3Memory memory, m3stack_t offset, size_t size) {
+    if(WASM_DEBUG_m3SegmentedMemAccess){
+        ESP_LOGI("WASM3", "Requested offset: %p (%d) at mem %p", offset, size, memory);
+    }
+
     return (void*)m3_ResolvePointer(memory, (mos)(uintptr_t)offset);
 }
 

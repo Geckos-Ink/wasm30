@@ -19,6 +19,9 @@ static const char *TAG_DUMP = "BYTE_DUMP";
         return;
     }
     
+    ESP_LOGI(TAG_DUMP, "log_bytes of %p", data);
+    waitForIt();
+
     // Buffer per la formattazione di una riga (3 caratteri per byte: 2 cifre hex + spazio)
     char buffer[16 * 3 + 1]; // Max 16 byte per riga + terminatore
     
