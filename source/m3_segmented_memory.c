@@ -953,8 +953,8 @@ M3Result m3_memcpy(M3Memory* memory, void* dest, const void* src, size_t n) {
     bool src_is_segmented = IsValidMemoryAccess(memory, CAST_PTR src, n);
 
     if(WASM_DEBUG_m3_memcpy){
-        ESP_LOGI("WASM3", "dest_is_segmented: %d", dest_is_segmented);
-        ESP_LOGI("WASM3", "src_is_segmented: %d", src_is_segmented);
+        ESP_LOGI("WASM3", "dest_is_segmented: %d (%p)", dest_is_segmented, dest);
+        ESP_LOGI("WASM3", "src_is_segmented: %d (%p)", src_is_segmented, src);
     }
 
     if(!dest_is_segmented && !src_is_segmented) {
