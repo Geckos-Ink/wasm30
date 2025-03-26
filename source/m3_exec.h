@@ -1341,6 +1341,7 @@ d_m3Op (Const32) {
     */
     if(WASM_DEBUG_Const){ 
         ESP_LOGI("WASM3", "Const32 called");
+        //ESP_LOGI("WASM3", "Const32: _pc = %u", (unsigned)_pc);
         waitForIt();
     }
 
@@ -1384,7 +1385,11 @@ d_m3Op (Const64) {
     slot (u64) = value;
     nextOp ();
     */
-    if(WASM_DEBUG_Const) ESP_LOGI("WASM3", "Const64 called");
+    if(WASM_DEBUG_Const){ 
+        ESP_LOGI("WASM3", "Const64 called");
+        //ESP_LOGI("WASM3", "Const64: _pc = %u", (unsigned)_pc);
+        waitForIt();
+    }
 
     // Prima verifica la validità dell'accesso alla memoria sorgente
     void* src_ptr = m3SegmentedMemAccess(_mem, _pc, sizeof(u64));
@@ -1400,7 +1405,7 @@ d_m3Op (Const64) {
     
     m3_memcpy(_mem, &value, src_ptr, sizeof(u64));     
 
-        // aka immediate(i32);
+    // aka immediate(i32);
     _pc += (M3_SIZEOF_PTR == 4) ? 2 : 1;  // Su ESP32 sempre 2 perché M3_SIZEOF_PTR == 4
 
     if(WASM_ConstUseComplexAssing){

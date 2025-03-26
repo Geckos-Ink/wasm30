@@ -1228,6 +1228,8 @@ void  ReportNativeStackUsage  ()
 }
 
 
+DEBUG_TYPE WASM_DEBUG_Call = WASM_DEBUG_ALL || (WASM_DEBUG && false);
+
 M3Result m3_CallVL(IM3Function i_function, va_list i_args)
 {
     IM3Runtime runtime = i_function->module->runtime;
@@ -1264,10 +1266,16 @@ _   (checkStartFunction(i_function->module))
 
 // Here's born _mem
 // (ptr)(runtime->stack) => (ptr)0
+ptr _pc = (ptr)(runtime->stack);
+
+if(WASM_DEBUG_Call){
+    ESP_LOGI("WASM3", "m3_CallVL: _pc = %p", _pc);
+}
+
 # if (d_m3EnableOpProfiling || d_m3EnableOpTracing)
-    result = (M3Result) RunCode(i_function->compiled, (ptr)(runtime->stack), &runtime->memory, d_m3OpDefaultArgs, d_m3BaseCstr);
+    result = (M3Result) RunCode(i_function->compiled, _pc, &runtime->memory, d_m3OpDefaultArgs, d_m3BaseCstr);
 # else
-    result = (M3Result) RunCode(i_function->compiled, (ptr)(runtime->stack), &runtime->memory, d_m3OpDefaultArgs);
+    result = (M3Result) RunCode(i_function->compiled, _pc, &runtime->memory, d_m3OpDefaultArgs);
 # endif
     ReportNativeStackUsage();
 
@@ -1315,10 +1323,16 @@ _   (checkStartFunction(i_function->module))
         }
     }
 
+    ptr _pc = (ptr)(runtime->stack);
+
+    if(WASM_DEBUG_Call){
+        ESP_LOGI("WASM3", "m3_Call: _pc = %p", _pc);
+    }    
+
 # if (d_m3EnableOpProfiling || d_m3EnableOpTracing)
-    result = (M3Result) RunCode(i_function->compiled, (runtime->stack), &runtime->memory, d_m3OpDefaultArgs, d_m3BaseCstr);
+    result = (M3Result) RunCode(i_function->compiled, _pc, &runtime->memory, d_m3OpDefaultArgs, d_m3BaseCstr);
 # else
-    result = (M3Result) RunCode(i_function->compiled, (runtime->stack), &runtime->memory, d_m3OpDefaultArgs);
+    result = (M3Result) RunCode(i_function->compiled, _pc, &runtime->memory, d_m3OpDefaultArgs);
 # endif
 
     ReportNativeStackUsage();
