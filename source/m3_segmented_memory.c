@@ -985,6 +985,7 @@ M3Result m3_memcpy(M3Memory* memory, void* dest, const void* src, size_t n) {
             ESP_LOGI("WASM3", "memcpy(%p, %p, %d)", real_dest, real_src, copy_size); 
             wait(); 
         }
+        memcpy(real_dest, real_src, copy_size);
 
         // Update pointers and remaining count
         curr_src = (const char*)curr_src + copy_size;
